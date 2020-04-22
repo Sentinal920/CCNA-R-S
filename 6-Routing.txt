@@ -1,0 +1,173 @@
+Router's job is to forward packet from one network to another choosing the best path from the routing table
+
+Types of Routing
+================
+These  Routing Protocols specifies how routers communicate with each other to distribute information that enables them to select routes between any two nodes on a computer network.
+There are different types of routing protocols that are responsible for the way packets route.
+
+1) Static Routing 
+2) Default Routing
+3) Dynamic Routing
+	(i)   Distance Vector Protocol 
+				-RiPv1,RIPv2,IGRP
+	(ii)  Link State Protocol 
+				-OSPF,IS-IS
+	(iii) Hybrid Protocol (Combo)
+				-EIGRP
+		
+
+		
+FLSM(Fixed Length Subnet Mask):--RIPv1,IGRP
+VLSM(Variable Length Subnet Mask):--RIPv2,EIGRP,OSPF,IS-IS
+
+
+Consider a senario having 3 routers connected with each other and each routers having their own one network.
+Refer Network.png for the Graphical Display of the network
+
+*So total there are 5 Networks(10.0.0.0, 20.0.0.0, 30.0.0.0, 40.0.0.0, 50.0.0.0)
+	Router-1's network eth-0(10.0.0.0) 
+	Router 1 and Router 2 connected end-points Eth-1(20.0.0.1 and 20.0.0.2)
+	Router-2's network eth-0(30.0.0.0)
+	Router 2 and Router 3 connected end-points Eth-1(40.0.0.1 and 40.0.0.2)
+	Router-3's network eth-0(50.0.0.0)
+	
+Configure Routers	
+-------------------
+Let's assign IP ADDRESS to all 3 Routers
+
+R1(config)#interface f0/0
+R1(config-if)#ip address 10.0.0.1 255.0.0.0
+R1(config-if)#no shut
+R1(config)#interface s0/0
+R1(config-if)#ip address 20.0.0.1 255.0.0.0
+R1(config-if)#clock rate 64000
+R1(config-if)#no shutdown
+
+R2(config)#interface f0/0
+R2(config-if)#ip address 30.0.0.1 255.0.0.0
+R2(config-if)#no shutdown
+R2(config-if)#int s0/0
+R2(config-if)#ip address 20.0.0.2 255.0.0.0
+R2(config-if)#clock rate 64000
+R2(config-if)#no shutdown
+R2(config)#interface s0/1
+R2(config-if)#ip address 40.0.0.1 255.0.0.0
+R2(config-if)#clock rate 64000
+R2(config-if)#no shutdown
+
+R3(config)#interface f0/0
+R3(config-if)#ip address 50.0.0.1 255.0.0.0
+R3(config-if)#no shutdown
+R3(config-if)#exit
+R3(config)#interface s0/0
+R3(config-if)#ip address 40.0.0.2 255.0.0.0
+R3(config-if)#clock rate 64000
+R3(config-if)#no shutdown
+	
+Now You can configure any Routing Protocol
+
+-----------------	
+1) Static Routing
+-----------------
+//# ip route <DESTINATION NID> <SUBNET MASK> <NEXT HOP ADDRESS>
+
+FOR ROUTER 1
+R1(config)#ip route 30.0.0.0 255.0.0.0 20.0.0.2
+R1(config)#ip route 40.0.0.0 255.0.0.0 20.0.0.2
+R1(config)#ip route 50.0.0.0 255.0.0.0 20.0.0.2
+
+FOR ROUTER 2
+R2(config)#ip route 10.0.0.0 255.0.0.0 20.0.0.1
+R2(config)#ip route 50.0.0.0 255.0.0.0 40.0.0.2
+
+FOR ROUTER 3
+R3(config)#ip route 10.0.0.0 255.0.0.0 40.0.0.1
+R3(config)#ip route 20.0.0.0 255.0.0.0 40.0.0.1
+R3(config)#ip route 30.0.0.0 255.0.0.0 40.0.0.1
+
+------------------
+2) Default Routing
+------------------
+//# ip route <DESTINATION NID> <SUBNET MASK> <NEXT HOP ADDRESS>
+
+FOR ROUTER 1
+R1(config)#ip route 0.0.0.0 0.0.0.0 20.0.0.2
+
+FOR ROUTER 2
+R2(config)#ip route 0.0.0.0 0.0.0.0 20.0.0.1
+R2(config)#ip route 0.0.0.0 0.0.0.0 40.0.0.2
+
+FOR ROUTER 3
+R3(config)#ip route 0.0.0.0 0.0.0.0 40.0.0.1
+
+------------------
+3) Dynamic Routing
+------------------
+-=-=-=-=-=-=-=-=-
+USING ROUTER RIP 
+-=-=-=-=-=-=-=-=-
+FOR ROUTER 1
+R1(config)# Router RIP
+R1(config-router)# version 2
+R1(config-router)# network 10.0.0.0
+R1(config-router)# network 20.0.0.0 
+
+FOR ROUTER 2
+R2(config)# Router RIP
+R2(config-router)# version 2
+R2(config-router)# network 20.0.0.0
+R2(config-router)# network 30.0.0.0
+R2(config-router)# network 40.0.0.0 
+
+FOR ROUTER 3
+R3(config)# Router RIP
+R3(config-router)# version 2
+R3(config-router)# network 40.0.0.0
+R3(config-router)# network 50.0.0.0 
+
+-=-=-=-=-=-
+Using EIGRP
+-=-=-=-=-=-
+FOR ROUTER 1
+R1# configure terminal
+R1(config)#router eigrp 22
+R1(config-router)#network 10.0.0.0 255.0.0.0
+R1(config-router)#network 20.0.0.0 255.0.0.0
+
+FOR ROUTER 2
+R2# configure terminal
+R2(config)#router eigrp 22
+R2(config-router)#network 20.0.0.0 255.0.0.0
+R2(config-router)#network 30.0.0.0 255.0.0.0
+R2(config-router)#network 40.0.0.0 255.0.0.0
+
+FOR ROUTER 3
+R3# configure terminal
+R3(config)#router eigrp 22
+R3(config-router)#network 40.0.0.0 255.0.0.0
+R3(config-router)#network 50.0.0.0 255.0.0.0
+
+-=-=-=-=-=
+Using OSPF
+-=-=-=-=-=
+OSPF uses Wildcard instead of Subnet
+	Eg: if Subnet=255.255.255.0
+		 Wildcard=0.255.255.255
+	
+FOR ROUTER 1
+R1(config)#router ospf 22
+R1(config-router)#network 10.0.0.0 0.255.255.255 area 0
+R1(config-router)#network 20.0.0.0 0.255.255.255 area 0
+
+FOR ROUTER 2
+R2(config)#router ospf 22
+R2(config-router)#network 20.0.0.0 0.255.255.255 area 0
+R2(config-router)#network 30.0.0.0 0.255.255.255 area 0
+R2(config-router)#network 40.0.0.0 0.255.255.255 area 0
+
+FOR Router 3 
+R3(config)#router ospf 22
+R3(config-router)#network 40.0.0.0 0.255.255.255 area 0
+R3(config-router)#network 50.0.0.0 0.255.255.255 area 0
+
+

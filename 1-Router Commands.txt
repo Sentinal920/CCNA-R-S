@@ -1,0 +1,149 @@
+-=-=-=-=-=-=-=-=-=-=
+Router Boot Process
+=-=-=-=-=-=-=-=-=-=-
+1) POST
+2) ROM 
+		Register
+		--------
+		0x2102 -Default
+		0x2142 -Pass Recover
+3) FLASH : (IOS)
+4) NVRAM : (Saved Config, Startup Config)
+5) RAM : (Running Config)
+
+To configure the router press
+dialog box [Y/N]? N
+Router> :
+		:
+		:
+		:
+
+-=-=-=-=-=-=-		
+Router Modes
+=-=-=-=-=-=-=
+Router> {User Mode}
+Router> enable
+
+Router# {Privileged Mode}
+Router# config terminal
+
+Router(config)# {Global mode}
+
+So there are 3 Router Modes
+----------------------------
+	> {Usermode} : It is the least privileged mode
+	# {Privileged Mode} : Has Basic privileges
+	(config)# {Global Mode} : Has Global Privileges that allows to configure router
+
+User Mode   >
+----------
+When Router boots up it is in ">" (User Mode) which allows users to execute basic commands such as show system's status. Router cannot be configured or restarted in this mode.
+
+Privileged Mode   #
+---------------
+So you have to type "enable" to get into "#" (privileged mode) which allows users to view system configuration or restart the system. Router cannot be configured in this mode.
+
+Global Mode   (config)#
+-----------
+So typing "configure terminal" gets you into Global mode where you can configure router (IP Addresses, Password protect router, Change Hostname, assign DNS or DHCP, enable ssh or telnet, etc)
+
+Now Global Mode has various Sub modes
+		Router(config-if)# --interface configure mode
+		Router(config-subif)# --subinterface configure mode
+		Router(config-line)# -- line configuration mode (Vty,etc)
+		Router(config-router)# -- routing protocols configuration mode (RIP,EIGRP,OSPF,etc)
+
+You can also protect Privileged Mode and Global Mode with passwords to prevent outsider access the router
+
+Accidentaly if you press wrong input (Eg: emable instead of enable) router goes into lag mode for 30-60 seconds
+Use = Ctrl+Shift+6 (To break out of the lag)
+
+DRAM = RAM (Runing-config) (Temp)
+NVRAM = Hard Disk (startup-config) (Permenant)
+
+-=-=-=-=
+Commands
+=-=-=-=- 
+
+*Clock Configuration
+	Router# clock set ?
+	Router# clock set 11:30:55 14 mar 2020
+	
+*Check Command History
+	Router# Show History
+	
+*Check Terminal Size
+	Router# Show terminal
+
+*Set Terminal Size
+	Router# terminal history size 25
+
+*Check Basic Configuration of Router
+	Router# show version
+
+*Set Hostname of Router
+	Router(config)# hostname KUNAL
+	KUNAL(config)#
+
+*Set Banner for Router
+	Router(config)# banner motd #WELCOME KUNAL#
+
+*Set Timeout for Console
+	Router(config)# line console 0
+	Router(config-line)# exec-timeout 15 30
+
+*For continuity in command when router configuration
+	Router(config-line)# logging synchronous
+	
+*Set Enable Password
+	Router(config)# enable password CCNA
+	Router(config)# enable secret CCNP
+	
+*Set Console Password
+	Router(config)# line console 0
+	Router(config-line)# password CCIE
+	Router(config-line)# login
+	
+*Set telnet pasword
+	Router(config)# line vty 0 4
+	Router(config-line)# password Telnet
+	Router(config-line)# login
+	
+*Encrypt All Password	
+	Router(config)# service password-encryption
+	
+*Set Description on Interface
+	Router(config)# interface F0/0
+	Router(config-if)# description router to pc
+	
+*Check DRAM
+	Router# show running-config
+	
+*Check NVRAM	
+	Router# show startup-config
+	
+*Do Command
+	Router(Config)# sh run
+			 ^
+	% Invalid input detected at '^' marker
+	Router(config)# do sh run
+
+*Set IP on Ethernet
+	Router(config)# interface F0/0
+	Router(config)# ip address 10.0.0.1 255.0.0.0
+	Router(config)# no shutdown
+
+*Set IP on Serial
+	Router(config)# interface S0/0
+	Router(config-if)# ip address 20.0.0.1 255.0.0.0
+	Router(config-if)# clock rate 64000
+	Router(config-if)# no shutdown
+
+*Save data DRAM to NVRAM
+	Router# copy running-config startup-config
+	OR
+	Router# wr
+	
+*Check IP on interface	
+	Router# show ip interface brief
+	

@@ -1,0 +1,7 @@
+Distance Vector Protocol: Router knows the entire path to reach destination router then it decides the shortest path according to distance so High bandwidth is required
+
+Link State Protocol: Router knows only location of neighbours and neighbours know of their neighbours
+
+
+FLSM(Fixed Length Subnet Mask)
+VLSM(Variable Length Subnet Mask

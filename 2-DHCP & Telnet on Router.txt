@@ -1,0 +1,18 @@
+Configure DHCP Server on Router
+-------------------------------
+Router(config)# int F0/0
+Router(config-if)# ip address 10.0.0.1 255.0.0.0
+Router(config-if)# no shutdown
+Router(config-if)# exit
+Router(config)#ip dhcp pool kunal
+Router(dhcp-config)# network 10.0.0.0 255.0.0.0
+Router(dhcp-config)# default-router 10.0.0.1
+Router(dhcp-config)# dns-server 4.2.2.2
+	CTRL+Z
+
+Router(config)# line vty 0 4
+Router(config-line)# password telnet
+Router(config-line)# login
+Router(config-line)# exit
+Router(config)# enable password ccna
+Router(config)# ip dhcp excluded-address 10.0.0.2-10.0.0.22

@@ -1,0 +1,25 @@
+Enable SSH on Router
+--------------------
+FORM ROUTER (Enable SSH)
+==========
+
+Router# config t
+Router(config)# interface F0/0
+Router(config)# ip address 10.0.0.1 255.0.0.0
+Router(config)# no shut
+Router(config)# hostname R1
+R1(config)# enable secret CCNP
+R1(config)# username cisco password cisco
+R1(config)# ip domain-name www.cisco.com
+R1(config)# crypto key generate rsa
+			:512
+R1(config)# ip ssh authentication-retires 5
+R1(config)# ip ssh time-out 60
+R1(config)# aaa new-model
+R1(config)# line vty 0 4
+R1(config-line)# transport input ssh
+
+FROM PC (Connect to Router via SSH)
+=======
+
+cmd--> ssh -L cisco 10.0.0.1

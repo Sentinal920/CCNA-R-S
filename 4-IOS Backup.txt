@@ -1,0 +1,37 @@
+Router_IP_address    10.0.0.1
+TFTP_Server_IP_address  10.0.0.2
+
+Step1: Set IP Address
+
+Step2: Check Flash File
+		Router# show flash:
+		
+Step3: Backup Flash File	
+		Router# copy flash:tftp:
+		Router# ? xxxx.bin
+		Router# remote host? 10.0.0.2
+		Router# destination filename? xxxx.bin
+		
+Step4: Delete Flash File	
+		Router# delete xxxx.bin
+		
+Step5: Reload
+		Router# reload
+		.....? failed
+
+Step6: Without Flash
+		rommon> tftpdnld
+		Error:- Set the vlues (IP,sub,def,tftp,file)
+		
+Step7: 
+		IP_ADD=10.0.0.1
+		IP_SUB=255.0.0.0
+		DEF_GATE=10.0.0.1
+		TFTP_SERVER=10.0.0.2
+		TFTP_FILE=xxxx.bin
+	Router> set
+	Router> tftpdnld
+	:y
+	Router> reset
+	Router# show flash
+	
