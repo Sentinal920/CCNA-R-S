@@ -4,7 +4,7 @@ Router(config)# int F0/0
 Router(config-if)# ip address 10.0.0.1 255.0.0.0
 Router(config-if)# no shutdown
 Router(config-if)# exit
-Router(config)#ip dhcp pool kunal
+Router(config)#ip dhcp pool sentinal
 Router(dhcp-config)# network 10.0.0.0 255.0.0.0
 Router(dhcp-config)# default-router 10.0.0.1
 Router(dhcp-config)# dns-server 4.2.2.2
